@@ -3,7 +3,7 @@ byggvir
 
 Byggvir is designed to be the simplest possible command line processing for ruby 2.1
 
-Just require byggvir/simple and off you go! 
+Just require byggvir/simple and off you go!
 
 ```ruby
 require 'byggvir/simple'
@@ -19,17 +19,6 @@ cat_zoo -c "Mr Buttons,spot" -d 5.0
 cat_zoo -c Mephistopheles,Drunky -d 5
 ```
 
-Byggvir::cli will apply to the function you specify
-
-```ruby
-require 'byggvir'
-
-Byggvir::cli,
-def cat_master(cats:)
-    
-end
-```
-
 Byggvir/multiple will match multiple subfunctions
 ```bash
 pet dog -n 5
@@ -42,9 +31,9 @@ require 'byggvir'
 class Pet < Byggvir::Multiple
   doc "The number of dogs",
   def dog(number:)
-  
+
   end
-  
+
   doc "The number of cats",
   def cat(number:)
 

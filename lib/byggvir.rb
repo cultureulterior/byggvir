@@ -1,8 +1,5 @@
 require 'byggvir/static'
 class Byggvir
-  def self.cli(fun)
-    ::Byggvir.wrap(self,cli)
-  end
   class TestObject
   end
   class Multiple
