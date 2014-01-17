@@ -2,24 +2,28 @@ require 'set'
 require 'getoptlong'
 require 'yaml'
 class Byggvir
-  def error!(err)
-    $stderr.puts(err);$stderr.flush;Process.exit!(-1);
+  def self.error!(err)
+    $stderr.puts("#{$0}:#{err}");$stderr.flush;Process.exit!(-1);
   end
-  def self.wrap(instance,method)
-    name = method.name
-    arguments = method #map argument types
+  def self.parameters(method)
+    method #map argument types
       .parameters
       .map{|ty, na| [na.to_s, ty]}
       .to_h
+  end
+  def self.wrap(instance,method)
+    name = method.name
+    arguments = ::Byggvir.parameters(method)
     if (badarg = (arguments.values.to_set - [:keyreq, :key].to_set)).empty?
-      keyv = { :keyreq => GetoptLong::REQUIRED_ARGUMENT, :key => GetoptLong::OPTIONAL_ARGUMENT }
+      required_arguments = arguments.select{|k,v| v == :keyreq}.keys.to_set
       short = arguments
         .keys
         .map{|k| {(?- + k[0]) => k}} #prepend dash
         .reduce{|old, new| old.merge(new){|k, o, n| nil}} #duplicates are uncertain
         .select{|k, v| v != nil}
         .invert
-      opts = GetoptLong.new(*arguments.map{|k, v| ["--#{k}", short[k], keyv[v]].compact})
+      opts = GetoptLong.new(*arguments.map{|k, v| ["--#{k}", short[k], GetoptLong::REQUIRED_ARGUMENT].compact})
+      opts.quiet = true
       call = {}
       unwrap = proc {|w| (w.class == Array && w.length == 1)?w[0]:w }
       begin
@@ -27,10 +31,14 @@ class Byggvir
       rescue GetoptLong::InvalidOption => ex
         ::Byggvir.error!(ex.to_s)
       else
-        instance.send(name,**call)
+        if (missing_arguments = (required_arguments - call.keys.map(&:to_s).to_set)).empty?
+          instance.send(name,**call)
+        else
+          ::Byggvir.error!("Missing arguments to #{name}: #{missing_arguments.to_a.join(?,)}")
+        end
       end
     else
-      ::Byggvir.error("Need a like def(required: ,optional: thing)")
+      ::Byggvir.error!("#{name} is not defined correctly, bad arguments #{badarg}\nByggvir can only use optional or mandatory keyword arguments like def(something: other:val)")
     end
   end
 end
