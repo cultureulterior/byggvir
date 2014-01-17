@@ -3,5 +3,5 @@ $:.push('../lib')
 require 'byggvir/simple'
 
 def easy(pets: ,humans: [:mommy, :daddy], gifts: 0, money: 0.0)
-  puts "Pets: #{cats}, Humans #{dogs}, Gifts #{birds}, Money: #{0.0}"
+  puts "Pets: #{pets}, Humans #{humans}, Gifts #{gifts}, Money: #{money}"
 end
