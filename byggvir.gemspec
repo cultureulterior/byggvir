@@ -8,21 +8,18 @@ Gem::Specification.new do |s|
   s.version  = Byggvir::VERSION.dup
   s.date     = "2014-01-13"
   s.summary  = "Command line tool for ruby2.1"
-  s.email    = "todo@project.com"
-  s.homepage = "http://todo.project.com/"
-  s.authors  = ['Me Todo']
-
+  s.email    = "sam@ulterior.org"
+  s.homepage = "https://github.com/cultureulterior/byggvir"
+  s.authors  = ['Samuel Kleiner']
+  s.licenses = 'MIT'
   s.description = <<-EOF
 Command line parser for new ruby2.1 functionality
 EOF
 
   dependencies = [
-    # Examples:
-    # [:runtime,     "rack",  "~> 1.1"],
-    # [:development, "rspec", "~> 2.1"],
   ]
 
-  s.files         = Dir['**/*']
+  s.files         = Dir['**/*'].grep(/.(rb|md)$/)
   s.test_files    = Dir['test/**/*'] + Dir['spec/**/*']
   s.executables   = Dir['bin/*'].map { |f| File.basename(f) }
   s.require_paths = ["lib"]
@@ -32,6 +29,7 @@ EOF
   s.rubygems_version = "2.2.1"
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.specification_version = 3 if s.respond_to? :specification_version
+  s.required_ruby_version = "2.1"
 
   dependencies.each do |type, name, version|
     if s.respond_to?("add_#{type}_dependency")
