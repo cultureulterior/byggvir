@@ -9,6 +9,8 @@ class Byggvir
         @docs||={}
         @docs[name]=doc
       end
+
+      # List existing commands
       def commands(inst)
         unless @docs
           @docs = (inst.methods.to_set - TestObject.new.methods.to_set).map{|meth|
@@ -18,6 +20,8 @@ class Byggvir
         longest = @docs.keys.map(&:length).max
         @docs.map{ |k,v| Kernel.sprintf("% #{longest+1}s : %s",k,v)}.join("\n")
       end
+
+      # Instantiate a multiple function object
       def new(*args)
         inst=super(*args)
         ::Byggvir.error!("Please specify a method, One of: \n#{commands(inst)}") unless ARGV.length>0
